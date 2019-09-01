@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>spotify-emotion-tracker</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+    <center>
+      <h1></h1>
+      <button onClick="backToIndex()">back to index</button>
+      <canvas id="chart" width="800" height="600"></canvas>
+      <script type="text/javascript">
+        var chart = document.getElementById("chart").getContext("2d");
+
+        const COL_HAPPY = 'rgba(46, 204, 113, 0.5)'
+        const COL_OK = 'rgba(228, 233, 237, 0.5)'
+        const COL_SAD = 'rgba(207, 0, 15, 0.5)'
+
+        var cols = {{data}}.map((x) => {
+            if(x > 0.6) {
+                return COL_HAPPY;
+            } else if(x > 0.4) {
+                return COL_OK;
+            } else {
+                return COL_SAD;
+            }
+        });
+
+        var width = window.innerWidth || document.body.clientWidth;
+        var gradient = chart.createLinearGradient(0, 0, width, 0)
+        for(let i = 0; i < cols.length; i++) {
+            var perct = i / cols.length;
+            gradient.addColorStop(perct, cols[i]);
+        }
+        // gradient.addColorStop(0, COL_HAPPY)
+        // gradient.addColorStop(1, COL_SAD)
+
+        var data = {
+          labels: {{labels|safe}},
+          datasets: [
+            {
+              label: "something",
+              data: {{data}},
+              borderColor: cols,
+              pointBorderColor: cols,
+              pointBackgroundColor: cols,
+              backgroundColor: gradient,
+              fill: true,
+              borderWidth: 4
+            }
+          ]
+        };
+
+        new Chart(chart, {
+          type: "line",
+          data: data
+        });
+
+        function backToIndex() {
+          console.log("AHGHGHA");
+          var url = new URL(window.location);
+
+          const params = new URLSearchParams(url.search);
+          params.delete("id");
+          url.search = params.toString();
+
+          url.pathname = "/";
+
+          window.location = url.toString();
+        }
+      </script>
+    </center>
+  </body>
+</html>

@@ -50,8 +50,17 @@ def get_many_audio_features(token, ids):
 
 
 def get_playlist_tracks(token, id):
+    responses = []
     r = requests.get(
         f'https://api.spotify.com/v1/playlists/{id}/tracks',
         headers=get_auth_header(token)
     )
-    return r
+    responses.append(r)
+
+    while (r.json().get('next')):
+        r = requests.get(
+            r.json().get('next'),
+            headers=get_auth_header(token)
+        )
+        responses.append(r)
+    return responses

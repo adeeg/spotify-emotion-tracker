@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>spotify-emotion-tracker</title>
+  </head>
+  <body>
+    <center>
+      <h1>spotify-emotion-tracker</h1>
+
+      Enter playlist id:
+
+      <form onSubmit="return checkSubmit();">
+        <input id="playlist-id" type="text" name="playlist-id" />
+      </form>
+    </center>
+
+    <script>
+      function checkSubmit() {
+        var resp = document.getElementById("playlist-id").value;
+
+        var url = new URL(window.location);
+
+        const params = new URLSearchParams(url.search);
+        params.set("id", resp);
+        url.search = params.toString();
+
+        url.pathname = "/analyse";
+
+        window.location = url.toString();
+
+        return false;
+      }
+    </script>
+  </body>
+</html>

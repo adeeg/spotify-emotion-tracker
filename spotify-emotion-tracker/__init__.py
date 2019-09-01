@@ -1,8 +1,8 @@
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, redirect, url_for, render_template
 import requests
 import json
 from .spotify import get_token, authorize, get_audio_features
-from .analysis import analyse_playlist
+from .analysis import analyse_playlist, group_by_day
 
 
 def create_app(test_config=None):
@@ -10,23 +10,41 @@ def create_app(test_config=None):
 
     @app.route('/')
     def index():
-        code = request.args.get('code')
-
-        if code:
+        token = request.args.get('token')
+        if token:
             # we have a token
-            token = get_token(code)
-            # feat = get_audio_features(
-            #     token,
-            #     '5w3yxRRxy5pvZdUvBJF6ve')
-            r = analyse_playlist(token)
-
-            return r
+            return render_template('index.html')
         else:
             # get a token
+            return redirect(url_for('authorization'))
+
+    @app.route('/analyse')
+    def analyse():
+        token = request.args.get('token')
+        id = request.args.get('id')
+
+        if token:
+            r = analyse_playlist(token, id)
+
+            # remove time from date
+            dates = [x[:10] for x in r[0]]
+            dates, valences = group_by_day(dates, r[1])
+
+            return render_template('analyse.html', labels=json.dumps(dates), data=valences)
+        else:
             return redirect(url_for('authorization'))
 
     @app.route('/authorization')
     def authorization():
         return redirect(authorize())
+
+    @app.route('/token')
+    def token():
+        code = request.args.get('code')
+        if code:
+            token = get_token(code)
+        else:
+            return redirect(url_for('authorization'))
+        return redirect(url_for('index', token=token))
 
     return app
