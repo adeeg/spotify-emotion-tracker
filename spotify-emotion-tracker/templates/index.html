@@ -13,16 +13,40 @@
       <form onSubmit="return checkSubmit();">
         <input id="playlist-id" type="text" name="playlist-id" />
       </form>
+
+      Or select from your playlists:
+
+      <select id="select-user-playlist" onchange="checkSelect()"></select>
     </center>
 
     <script>
+      // add all user playlists to select
+      var select = document.getElementById('select-user-playlist');
+      for(playlist of {{playlists|safe}}) {
+          var option = document.createElement('option');
+          option.setAttribute('value', playlist.id);
+          option.text = playlist.name;
+          select.appendChild(option);
+
+          console.log(playlist);
+      }
+
+      function checkSelect() {
+          var val = document.getElementById('select-user-playlist').value;
+          return redirect(val);
+      }
+
       function checkSubmit() {
         var resp = document.getElementById("playlist-id").value;
 
+        return redirect(resp);
+      }
+
+      function redirect(id) {
         var url = new URL(window.location);
 
         const params = new URLSearchParams(url.search);
-        params.set("id", resp);
+        params.set("id", id);
         url.search = params.toString();
 
         url.pathname = "/analyse";

@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect, url_for, render_template
 import requests
 import json
-from .spotify import get_token, authorize, get_audio_features
+from .spotify import get_token, authorize, get_audio_features, get_user, get_user_playlists
 from .analysis import analyse_playlist, group_by_day
 
 
@@ -13,7 +13,9 @@ def create_app(test_config=None):
         token = request.args.get('token')
         if token:
             # we have a token
-            return render_template('index.html')
+            user_id = get_user(token).json().get('id')
+            playlists = get_user_playlists(token, user_id).json().get('items')
+            return render_template('index.html', playlists=json.dumps(playlists))
         else:
             # get a token
             return redirect(url_for('authorization'))

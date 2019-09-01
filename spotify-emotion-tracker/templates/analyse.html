@@ -9,13 +9,13 @@
 
     <center>
       <h1></h1>
-      <button onClick="backToIndex()">back to index</button>
+      <button onClick="backToIndex()">Back to index</button>
       <canvas id="chart" width="800" height="600"></canvas>
       <script type="text/javascript">
         var chart = document.getElementById("chart").getContext("2d");
 
         const COL_HAPPY = 'rgba(46, 204, 113, 0.5)'
-        const COL_OK = 'rgba(228, 233, 237, 0.5)'
+        const COL_OK = 'rgba(128, 128, 128, 0.5)'
         const COL_SAD = 'rgba(207, 0, 15, 0.5)'
 
         var cols = {{data}}.map((x) => {

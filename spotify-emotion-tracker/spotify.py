@@ -64,3 +64,19 @@ def get_playlist_tracks(token, id):
         )
         responses.append(r)
     return responses
+
+
+def get_user(token):
+    r = requests.get(
+        f'https://api.spotify.com/v1/audio-me',
+        headers=get_auth_header(token)
+    )
+    return r
+
+
+def get_user_playlists(token, id):
+    r = requests.get(
+        f'https://api.spotify.com/v1/users/{id}/playlists?limit=50',
+        headers=get_auth_header(token)
+    )
+    return r
