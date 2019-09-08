@@ -1,24 +1,32 @@
 <template>
   <div class="container">
-    <div>
-      <router-link to="/">
-        <b-button class="float-left mb-3">Back</b-button>
-      </router-link>
-    </div>
-    <div>{{userInfo}}</div>
+    <!-- user info -->
+    <b-card
+      :title="userInfo.data.display_name"
+      :img-src="getUserImage"
+      img-alt="Profile picture"
+      img-left
+    >
+      <b-button v-on:click="logout">Log out</b-button>
+    </b-card>
+
+    <hr />
+
+    <!-- manual playlist id -->
     <div>
       <b-input-group prepend="Enter a playlist ID:">
         <b-input id="form-input-playlist-id" placeholder="37i9dQZF1DWWQRwui0ExPn"></b-input>
       </b-input-group>
-      <hr />
     </div>
+
+    <!-- user playlists -->
     <div>
-      <h2>Choose one of your playlists:</h2>
+      <h3>Or choose one of your playlists:</h3>
       <b-card
         title="My favourite playlist!!"
         img-src="../assets/spotify_demo_album.jpg"
         img-alt="Album art"
-        img-top
+        img-left
         style="max-width: 20rem;"
       >
         <b-card-text>Playlist details</b-card-text>
@@ -35,14 +43,28 @@ export default {
     }
   } */
 
+  props: ["userInfo"],
+
+  computed: {
+    getUserImage: function() {
+      return this.userInfo.data.images[0].url;
+    }
+  },
+
   data() {
-    return {
+    /* return {
       userInfo: { id: "dog" }
-    };
+    }; */
+  },
+
+  methods: {
+    logout: function(event) {
+      this.$router.replace({ query: {} });
+    }
   },
 
   mounted() {
-    axios.get("").then(repose => (this.userInfo = response));
+    /* axios.get("").then(repose => (this.userInfo = response)); */
   }
 };
 </script>

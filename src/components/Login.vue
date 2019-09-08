@@ -11,7 +11,9 @@
         <div v-if="badUserInfo">
           <b-alert show variant="danger">Invalid Spotify token - please log in again.</b-alert>
         </div>
-        <div v-else>{{ userInfo }}</div>
+        <div v-else>
+          <PlaylistSelector :userInfo="userInfo" />
+        </div>
       </div>
     </div>
 
@@ -41,6 +43,8 @@
 <script>
 import axios from "axios";
 
+import PlaylistSelector from "./PlaylistSelector.vue";
+
 function getSpotifyAuthHeader(token) {
   return {
     Authorization: "Bearer " + token
@@ -48,6 +52,10 @@ function getSpotifyAuthHeader(token) {
 }
 
 export default {
+  components: {
+    PlaylistSelector
+  },
+
   data() {
     return {
       userInfo: {},
@@ -76,10 +84,6 @@ export default {
         })
         .finally(() => {
           this.loadingUserInfo = false;
-
-          if (!this.badUserInfo) {
-            this.$router.push("user");
-          }
         });
     }
   }
