@@ -33,17 +33,26 @@
         </div>
         <div v-else>
           <div v-for="item in userPlaylists.data.items">
-            <b-card
-              v-bind:key="item.id"
-              :img-src="item.images[0].url"
-              img-alt="Album art"
-              img-left
-              img-height="64px"
-              img-width="64px"
-              style="object-fit: cover;"
-            >
-              <b-card-text>{{ item.name }}</b-card-text>
-            </b-card>
+            <div>
+              <b-card
+                v-bind:key="item.id"
+                v-on:click="$root.$emit('bv::toggle::collapse', 'collapse-' + item.id)"
+                :img-src="item.images[0].url"
+                img-alt="Album art"
+                img-left
+                img-height="64px"
+                img-width="64px"
+                style="object-fit: cover;"
+              >
+                <!-- <b-button v-b-toggle="'collapse-' + item.id">toggle</b-button> -->
+                <b-card-text>{{ item.name }}</b-card-text>
+              </b-card>
+              <b-collapse :id="'collapse-' + item.id">
+                <b-card bg-variant="secondary" text-variant="white" style="border-top: none">
+                  <PlaylistAnalysis :playlistInfo="item" />
+                </b-card>
+              </b-collapse>
+            </div>
           </div>
         </div>
       </div>
@@ -53,9 +62,14 @@
 
 <script>
 import axios from "axios";
+import PlaylistAnalysis from "./PlaylistAnalysis.vue";
 
 export default {
   props: ["userInfo", "token", "getSpotifyAuthHeader"],
+
+  components: {
+    PlaylistAnalysis
+  },
 
   computed: {
     getUserImage: function() {
