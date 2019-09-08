@@ -7,7 +7,7 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 
 import App from "./App.vue";
 import Login from "./components/Login.vue";
-import PlaylistSelector from "./components/PlaylistSelector.vue";
+import User from "./components/User.vue";
 
 Vue.config.productionTip = false;
 Vue.use(VueRouter);
@@ -15,7 +15,7 @@ Vue.use(BootstrapVue);
 
 const routes = [
   { path: "/", component: Login, props: true },
-  { path: "/user", component: PlaylistSelector }
+  { path: "/user", component: User }
 ];
 
 const router = new VueRouter({

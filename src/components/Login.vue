@@ -12,7 +12,7 @@
           <b-alert show variant="danger">Invalid Spotify token - please log in again.</b-alert>
         </div>
         <div v-else>
-          <PlaylistSelector :userInfo="userInfo" />
+          <User :token="token" :userInfo="userInfo" :getSpotifyAuthHeader="getSpotifyAuthHeader" />
         </div>
       </div>
     </div>
@@ -43,17 +43,11 @@
 <script>
 import axios from "axios";
 
-import PlaylistSelector from "./PlaylistSelector.vue";
-
-function getSpotifyAuthHeader(token) {
-  return {
-    Authorization: "Bearer " + token
-  };
-}
+import User from "./User.vue";
 
 export default {
   components: {
-    PlaylistSelector
+    User
   },
 
   data() {
@@ -62,6 +56,36 @@ export default {
       loadingUserInfo: true,
       badUserInfo: false
     };
+  },
+
+  computed: {
+    token: function() {
+      return this.$route.query.token;
+    }
+  },
+
+  methods: {
+    getSpotifyAuthHeader: function(token) {
+      return {
+        Authorization: "Bearer " + token
+      };
+    },
+
+    getSpotifyUserInfo: function(token) {
+      if (token) {
+        axios
+          .get("https://api.spotify.com/v1/me", {
+            headers: this.getSpotifyAuthHeader(token)
+          })
+          .then(response => (this.userInfo = response))
+          .catch(error => {
+            this.badUserInfo = true;
+          })
+          .finally(() => {
+            this.loadingUserInfo = false;
+          });
+      }
+    }
   },
 
   beforeCreate() {
@@ -73,19 +97,7 @@ export default {
 
   mounted() {
     // get user info from spotify
-    if (this.$route.query.token) {
-      axios
-        .get("https://api.spotify.com/v1/me", {
-          headers: getSpotifyAuthHeader(this.$route.query.token)
-        })
-        .then(response => (this.userInfo = response))
-        .catch(error => {
-          this.badUserInfo = true;
-        })
-        .finally(() => {
-          this.loadingUserInfo = false;
-        });
-    }
+    this.getSpotifyUserInfo(this.token);
   }
 };
 </script>
