@@ -36,7 +36,7 @@
             <div>
               <b-card
                 v-bind:key="item.id"
-                v-on:click="$root.$emit('bv::toggle::collapse', 'collapse-' + item.id)"
+                v-on:click="$root.$emit('bv::toggle::collapse', 'collapse-' + item.id); $refs['analysis-' + item.id][0].load()"
                 :img-src="item.images[0].url"
                 img-alt="Album art"
                 img-left
@@ -44,12 +44,16 @@
                 img-width="64px"
                 style="object-fit: cover;"
               >
-                <!-- <b-button v-b-toggle="'collapse-' + item.id">toggle</b-button> -->
                 <b-card-text>{{ item.name }}</b-card-text>
               </b-card>
               <b-collapse :id="'collapse-' + item.id">
                 <b-card bg-variant="secondary" text-variant="white" style="border-top: none">
-                  <PlaylistAnalysis :playlistInfo="item" />
+                  <PlaylistAnalysis
+                    :ref="'analysis-' + item.id"
+                    :playlistInfo="item"
+                    :token="token"
+                    :getSpotifyAuthHeader="getSpotifyAuthHeader"
+                  />
                 </b-card>
               </b-collapse>
             </div>
