@@ -6,19 +6,26 @@ from .analysis import analyse_playlist, group_by_day
 
 
 def create_app(test_config=None):
-    app = Flask(__name__)
+    app = Flask(__name__,
+                static_folder='../dist/static',
+                template_folder='../dist')
 
-    @app.route('/')
+    """ @app.route('/')
     def index():
         token = request.args.get('token')
         if token:
             # we have a token
             user_id = get_user(token).json().get('id')
             playlists = get_user_playlists(token, user_id).json().get('items')
-            return render_template('index.html', playlists=json.dumps(playlists))
+            # eturn render_template('index.html', playlists=json.dumps(playlists))
+            return render_template('index.html')
         else:
             # get a token
-            return redirect(url_for('authorization'))
+            return redirect(url_for('authorization')) """
+
+    @app.route('/')
+    def index():
+        return render_template('index.html')
 
     @app.route('/analyse')
     def analyse():

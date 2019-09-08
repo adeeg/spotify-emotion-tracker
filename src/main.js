@@ -14,7 +14,7 @@ Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 
 const routes = [
-  { path: "/", component: Login },
+  { path: "/", component: Login, props: true },
   { path: "/user", component: PlaylistSelector }
 ];
 

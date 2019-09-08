@@ -5,6 +5,7 @@
         <b-button class="float-left mb-3">Back</b-button>
       </router-link>
     </div>
+    <div>{{userInfo}}</div>
     <div>
       <b-input-group prepend="Enter a playlist ID:">
         <b-input id="form-input-playlist-id" placeholder="37i9dQZF1DWWQRwui0ExPn"></b-input>
@@ -25,3 +26,23 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  /* getSpotifyHeader() {
+    return {
+      Authorization: 'Bearer '
+    }
+  } */
+
+  data() {
+    return {
+      userInfo: { id: "dog" }
+    };
+  },
+
+  mounted() {
+    axios.get("").then(repose => (this.userInfo = response));
+  }
+};
+</script>
