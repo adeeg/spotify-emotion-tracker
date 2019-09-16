@@ -1,29 +1,25 @@
 # spotify-emotion-tracker
 
-## Project setup
-```
-npm install
-```
+## Installing
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+1. `pipenv install`
+1. `npm install`
+1. create `auth.json`:
+    ```
+    {
+        "username": "",
+        "client_id": "",
+        "client_secret": "",
+        "redirect_uri": "http://127.0.0.1:5000/",
+        "scope": "user-read-private"
+    }
+    ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Building
 
-### Run your tests
-```
-npm run test
-```
+`npm run build`
 
-### Lints and fixes files
-```
-npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Running
+
+`make server`
