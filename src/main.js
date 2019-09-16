@@ -13,6 +13,9 @@ Vue.config.productionTip = false;
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 
+/* TODO: remove */
+Vue.config.devtools = true;
+
 const routes = [
   { path: "/", component: Login, props: true },
   { path: "/user", component: User }

@@ -6,13 +6,15 @@
       <b-button v-on:click="load">Try to load tracks again</b-button>
     </div>
     <div v-else>
-      <div v-if="loading">
-        <b-spinner label="Loading..."></b-spinner>
-        <div>{{ audioFeatures }}</div>
+      <div v-if="fullyLoaded">
+        <FeatureGraph
+          :playlistId="playlistInfo.id"
+          :tracksInfo="tracksInfo"
+          :tracksFeatures="tracksFeatures"
+        />
       </div>
       <div v-else>
-        <div>{{ tracksInfo.length }}</div>
-        <div>{{ audioFeatures.length }}</div>
+        <b-spinner label="Loading..."></b-spinner>
       </div>
     </div>
   </div>
@@ -21,17 +23,30 @@
 </style>
 <script>
 import axios from "axios";
+import FeatureGraph from "./FeatureGraph.vue";
 
 export default {
   props: ["playlistInfo", "token", "getSpotifyAuthHeader"],
 
+  components: {
+    FeatureGraph
+  },
+
   data() {
     return {
       tracksInfo: [],
-      audioFeatures: [],
+      tracksFeatures: [],
       badTracks: false,
       loading: true
     };
+  },
+
+  computed: {
+    fullyLoaded: function() {
+      return (
+        !this.loading && this.tracksInfo.length === this.tracksFeatures.length
+      );
+    }
   },
 
   methods: {
@@ -66,12 +81,12 @@ export default {
     },
 
     getSpotifyAudioFeatures: function(token, trackIds) {
-      axios
+      return axios
         .get(`https://api.spotify.com/v1/audio-features/?ids=${trackIds}`, {
           headers: this.getSpotifyAuthHeader(token)
         })
         .then(response => {
-          this.audioFeatures.push(...response.data.audio_features);
+          this.tracksFeatures.push(...response.data.audio_features);
         })
         .catch(error => {
           this.badTracks = true;

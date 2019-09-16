@@ -47,7 +47,7 @@
                 <b-card-text>{{ item.name }}</b-card-text>
               </b-card>
               <b-collapse :id="'collapse-' + item.id">
-                <b-card bg-variant="secondary" text-variant="white" style="border-top: none">
+                <b-card bg-variant="light" text-variant="black" style="border-top: none">
                   <PlaylistAnalysis
                     :ref="'analysis-' + item.id"
                     :playlistInfo="item"
