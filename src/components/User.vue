@@ -22,7 +22,7 @@
 
     <!-- user playlists -->
     <div>
-      <h5>Or choose one of your playlists:</h5>
+      <h5 class="text-left">Or choose one of your playlists:</h5>
 
       <div v-if="loadingPlaylists">
         <b-spinner label="Loading..."></b-spinner>
@@ -36,7 +36,7 @@
             <div>
               <b-card
                 v-bind:key="item.id"
-                v-on:click="$root.$emit('bv::toggle::collapse', 'collapse-' + item.id); $refs['analysis-' + item.id][0].load()"
+                v-on:click="$root.$emit('bv::toggle::collapse', 'collapse-' + item.id); let x = $refs['analysis-' + item.id][0]; if (x.loading) {x.load()};"
                 :img-src="item.images[0].url"
                 img-alt="Album art"
                 img-left
