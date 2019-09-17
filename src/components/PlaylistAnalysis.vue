@@ -11,7 +11,20 @@
           :playlistId="playlistInfo.id"
           :tracksInfo="tracksInfo"
           :tracksFeatures="tracksFeatures"
+          :optionGroup="optionGroup"
+          :key="optionGroup"
         />
+        <span>
+          <b-form inline>
+            <label>Group by </label>
+            <b-form-select class="ml-2" v-model="optionGroup" :options="[
+                { value: null, text: 'None' },
+                { value: 'day', text: 'Day' },
+                { value: 'week', text: 'Week' },
+                { value: 'month', text: 'Month' }
+              ]"><b-form-select/>
+          </b-form>
+        </span>
       </div>
       <div v-else>
         <b-spinner label="Loading..."></b-spinner>
@@ -37,7 +50,8 @@ export default {
       tracksInfo: [],
       tracksFeatures: [],
       badTracks: false,
-      loading: true
+      loading: true,
+      optionGroup: null
     };
   },
 
