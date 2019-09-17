@@ -1,5 +1,6 @@
 <template>
   <div>
+    <p>Average happiness: {{ average }}</p>
     <canvas :id="'chart-' + playlistId" width="400" height="400"></canvas>
   </div>
 </template>
@@ -13,6 +14,15 @@ import moment from "moment";
 
 export default {
   props: ["playlistId", "tracksInfo", "tracksFeatures", "optionGroup"],
+
+  computed: {
+    average: function() {
+      return (
+        this.tracksFeatures.reduce((a, b) => a + b.valence, 0) /
+        this.tracksFeatures.length
+      );
+    }
+  },
 
   methods: {
     getGroupFormat: function(groupMethod, date) {
