@@ -30,7 +30,7 @@
 
 Design
 
-[ ] enter playlist url instead of id
+[ ] enter playlist url instead of id?
 [x] add song info to graph nodes
 [ ] add dropdown button for playlist section
 
@@ -39,12 +39,13 @@ Content
 [ ] add 'post to social media' button
 [ ] add more options for graph customisation
 [ ] add about section
+[ ] fix for when user has >50 playlists
 
 Fixes
 
 [x] fix profile picture not showing
 [ ] fix site redirect
-[ ] actually log out
+[x] actually log out
 [ ] fix text clipping on playlist names
 [ ] delete old code
 [ ] fix playlist image stretching

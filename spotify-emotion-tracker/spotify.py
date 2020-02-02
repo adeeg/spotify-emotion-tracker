@@ -25,7 +25,7 @@ def get_token(code):
 
 
 def authorize():
-    link = 'https://accounts.spotify.com/authorize?response_type=code&client_id={}&scope={}&redirect_uri={}'\
+    link = 'https://accounts.spotify.com/authorize?response_type=code&client_id={}&scope={}&redirect_uri={}&show_dialog=true'\
         .format(auth.get('client_id'),
                 auth.get('scope'),
                 auth.get('redirect_uri'))
