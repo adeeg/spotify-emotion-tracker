@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from flask import Flask, request, redirect, url_for, render_template
 import requests
 import json

@@ -13,9 +13,31 @@
 
     <!-- manual playlist id -->
     <div>
-      <b-input-group prepend="Enter a playlist ID:">
-        <b-input id="form-input-playlist-id" placeholder="37i9dQZF1DWWQRwui0ExPn"></b-input>
-      </b-input-group>
+      <b-form
+        @submit="evt => { $root.$emit('bv::toggle::collapse', 'collapse-manual'); submitManualPlaylist(evt); }"
+      >
+        <b-input-group prepend="Enter a playlist ID:">
+          <b-input
+            id="form-input-playlist-id"
+            v-model="manualPlaylistIdTemp"
+            placeholder="37i9dQZF1DWWQRwui0ExPn"
+          ></b-input>
+          <b-input-group-append>
+            <b-button type="submit" variant="outline-success">Analyse</b-button>
+          </b-input-group-append>
+        </b-input-group>
+      </b-form>
+
+      <b-collapse :id="'collapse-manual'">
+        <b-card>
+          <PlaylistAnalysis
+            :ref="'analysis-manual'"
+            :playlistInfo="{ id: manualPlaylistId }"
+            :token="token"
+            :getSpotifyAuthHeader="getSpotifyAuthHeader"
+          />
+        </b-card>
+      </b-collapse>
     </div>
 
     <br />
@@ -85,7 +107,8 @@ export default {
     return {
       userPlaylists: {},
       loadingPlaylists: true,
-      badPlaylists: false
+      badPlaylists: false,
+      manualPlaylistId: ""
     };
   },
 
@@ -107,6 +130,19 @@ export default {
           .finally(() => {
             this.loadingPlaylists = false;
           });
+      }
+    },
+
+    submitManualPlaylist: function(evt) {
+      evt.preventDefault();
+      this.manualPlaylistId = this.manualPlaylistIdTemp;
+
+      /* this.$emit("bv::toggle::collapse", "collapse-manual"); */
+      let x = this.$refs["analysis-manual"];
+      console.log(x);
+
+      if (x.loading) {
+        x.load();
       }
     }
   },
