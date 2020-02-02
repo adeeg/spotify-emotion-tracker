@@ -5,6 +5,7 @@
       :title="userInfo.data.display_name"
       :img-src="getUserImage"
       img-alt="Profile picture"
+      img-height="125px"
       img-left
     >
       <b-button v-on:click="logout">Log out</b-button>

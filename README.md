@@ -42,8 +42,9 @@ Content
 
 Fixes
 
-[ ] fix profile picture not showing
+[x] fix profile picture not showing
 [ ] fix site redirect
 [ ] actually log out
 [ ] fix text clipping on playlist names
 [ ] delete old code
+[ ] fix playlist image stretching
