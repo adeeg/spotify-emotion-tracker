@@ -2,7 +2,7 @@
   <div>
     {{ asdf }}
     <div v-if="badTracks">
-      <b-alert show variant="danger">Could get tracks from playlist.</b-alert>
+      <b-alert show variant="danger">Could not get tracks from playlist.</b-alert>
       <b-button v-on:click="load">Try to load tracks again</b-button>
     </div>
     <div v-else>

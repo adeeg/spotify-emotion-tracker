@@ -23,3 +23,27 @@
 ## Running
 
 `make server`
+
+---
+
+## TODO
+
+Design
+
+[ ] enter playlist url instead of id
+[x] add song info to graph nodes
+[ ] add dropdown button for playlist section
+
+Content
+
+[ ] add 'post to social media' button
+[ ] add more options for graph customisation
+[ ] add about section
+
+Fixes
+
+[ ] fix profile picture not showing
+[ ] fix site redirect
+[ ] actually log out
+[ ] fix text clipping on playlist names
+[ ] delete old code

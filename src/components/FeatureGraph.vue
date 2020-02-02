@@ -36,9 +36,9 @@ export default {
         case "month":
           return moment(date).format("MMM YYYY");
         default:
-          return moment(date).format("Do MMM YYYY");
+          return moment(date).format("Do MMM YYYY hh:mm:s");
       }
-      return moment(date).format("Do MMM YYYY");
+      return moment(date).format("Do MMM YYYY hh:mm:s");
     },
 
     // this relies on dates & features being the same length (hopeful x)
@@ -66,6 +66,31 @@ export default {
       }
 
       return [Object.keys(dict), newValences];
+    },
+
+    newGroup: function(groupMethod, tracksInfos, tracksFeatures) {
+      let dict = {};
+
+      let dates = tracksInfos.map(x => x.added_at);
+
+      // group together into dict
+      for (let i = 0; i < dates.length; i++) {
+        let date = dates[i];
+        let trackInfo = tracksInfos[i];
+        let trackFeatures = tracksFeatures[i];
+
+        let combTrackData = Object.assign({}, trackInfo, trackFeatures);
+
+        let key = this.getGroupFormat(groupMethod, date);
+
+        if (key in dict) {
+          dict[key].push(combTrackData);
+        } else {
+          dict[key] = [combTrackData];
+        }
+      }
+
+      return [Object.keys(dict), Object.values(dict)]
     },
 
     getLineBackground: function(chart, valences) {
@@ -104,21 +129,40 @@ export default {
     var chart = document.getElementById(`chart-${this.playlistId}`);
 
     let dates = this.tracksInfo.map(x => x.added_at);
+    let combTrackData = [];
+
+    for (let i = 0; i < dates.length; i++) {
+      let trackInfo = this.tracksInfo[i];
+      let trackFeatures = this.tracksFeatures[i]; 
+
+      let combTrackD = Object.assign({}, trackInfo, trackFeatures);
+      combTrackData.push(combTrackD);
+    }
+    combTrackData = combTrackData.map(x => [x]);
     let valences = this.tracksFeatures.map(x => x.valence);
+
+
     if (this.optionGroup) {
-      let grouped = this.group(this.optionGroup, dates, valences);
+      let grouped = this.newGroup(this.optionGroup, this.tracksInfo, this.tracksFeatures);
       dates = grouped[0];
-      valences = grouped[1];
-    } else {
-      dates = dates.map(x => moment(x).format("Do MMM YYYY"));
+      combTrackData = grouped[1];
+
+      // reduce valences (avg)
+      let valences = [];
+      for (const vals of combTrackData) {
+        let vv = vals.map(x => x.valence);
+        let mean = vv.reduce((a, b) => a + b, 0) / vv.length;
+        valences.push(mean);
+      }
     }
 
     var data = {
       labels: dates,
       datasets: [
         {
-          label: "happiness",
-          data: valences
+          label: "Happiness",
+          data: valences,
+          metadata: combTrackData
         }
       ]
     };
@@ -148,6 +192,26 @@ export default {
             }
           }
         ]
+      },
+      tooltips: {
+        callbacks: {
+          //title: (tooltip, data) => "dog title",
+          //label: (items, data) => items.metadata,
+          afterLabel: function(tooltip, data) {
+            let metadata = data['datasets'][0]['metadata'][tooltip['index']];
+
+            let strings = metadata.map(x => '- ' + x['track']['artists'][0]['name']
+                         + ' - '
+                         + x['track']['name']
+                         + ': '
+                         + x['valence']);
+            strings.unshift("");
+
+            return strings;
+          }
+        },
+        titleFontSize: 16,
+        displayColors: false
       }
     };
 
